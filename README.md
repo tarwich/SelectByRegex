@@ -16,6 +16,8 @@ After installing, use the command palette and search for "Select By Regex". This
 
 This can be very useful for splitting a line by commas. You can run the command, then press RIGHT and your cursor(s) will be after every comma. Then just press ENTER.
 
+This tool could also be used to watch regular expressions run interactively. However, due to the way Sublime Text merges overlapping regions, it's not 100% accurate.
+
 Keybind:
 --------
 To bind this to a key, enter the following in your user keybinds file:
