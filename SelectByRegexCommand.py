@@ -1,6 +1,7 @@
 import re, sublime, sublime_plugin
 
 class SelectByRegexCommand(sublime_plugin.TextCommand):
+    previous_regex = ""
     original_regions = []
     
     def description():
@@ -35,8 +36,11 @@ class SelectByRegexCommand(sublime_plugin.TextCommand):
         """
         # If empty input, then deselect all
         if not text: self.restore_selection()
-        # Perform select by regex
-        else: self.update_selection(text, draw_borders=False)
+        else: 
+            # Perform select by regex
+            self.update_selection(text, draw_borders=False)
+            # Save the selection for next time
+            SelectByRegexCommand.previous_regex = text
     
     def restore_selection(self):
         """
@@ -63,7 +67,7 @@ class SelectByRegexCommand(sublime_plugin.TextCommand):
         for region in self.view.sel(): 
             SelectByRegexCommand.original_regions += [ sublime.Region(region.a, region.b) ]
         # Show the user input prompt asking for a regex
-        SelectByRegexCommand.input_view = self.view.window().show_input_panel('Regex:', '', 
+        SelectByRegexCommand.input_view = self.view.window().show_input_panel('Regex:', SelectByRegexCommand.previous_regex, 
             # On Done
             self.on_done,
             # On Change
