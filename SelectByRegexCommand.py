@@ -1,5 +1,4 @@
-import sublime, sublime_plugin
-import re
+import re, sublime, sublime_plugin
 
 class SelectByRegexCommand(sublime_plugin.TextCommand):
     original_regions = []
@@ -89,6 +88,8 @@ class SelectByRegexCommand(sublime_plugin.TextCommand):
         new_regions = []
         # Run this command on each region
         for region in SelectByRegexCommand.original_regions:
+            # If this region is backwards, then flip it
+            if(region.b < region.a): region = sublime.Region(region.b, region.a)
             # If the region is empty, then select the whole line
             if(region.size() == 0): region = view.line(region)
             # Initialize our search cursor to the beginning of the region region
