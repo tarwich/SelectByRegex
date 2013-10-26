@@ -1,0 +1,5 @@
+# OSX directory metadata file
+.DS_Store
+
+# Compiled python code
+*.pyc
