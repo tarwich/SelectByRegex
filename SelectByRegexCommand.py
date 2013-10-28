@@ -1,4 +1,5 @@
 import re, sublime, sublime_plugin
+ST3 = sublime.version() >= '3000'
 
 class SelectByRegexCommand(sublime_plugin.TextCommand):
     previous_regex = ""
@@ -123,7 +124,13 @@ class SelectByRegexCommand(sublime_plugin.TextCommand):
             else: view.erase_regions("SelectByRegexCommand")
         else: 
             # Select the new regions
-            if len(new_regions): view.sel().add_all(new_regions)
+            if len(new_regions):
+                if ST3:
+                    view.sel().add_all(new_regions)
+                else:
+                    for r in new_regions:
+                        view.sel().add(r)
+
             # If not regions, then select the original regions
             else: view.sel().add_all(SelectByRegexCommand.original_regions)
             # Erase the borders and select the regions
