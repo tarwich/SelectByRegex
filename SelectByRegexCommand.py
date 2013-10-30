@@ -1,4 +1,7 @@
 import re, sublime, sublime_plugin
+
+# Take note if we're in ST3 so that we can do ST3 specific stuff
+# (Currently unused, this line is left in, because I think it's handy to have around)
 ST3 = sublime.version() >= '3000'
 
 class SelectByRegexCommand(sublime_plugin.TextCommand):
@@ -84,7 +87,6 @@ class SelectByRegexCommand(sublime_plugin.TextCommand):
         
         :param regex: The regular expression for which to search
         """
-        # TODO: Remove this line
         # Don't process empty searches
         if not regex: return
         # Cache view for speed
@@ -123,14 +125,10 @@ class SelectByRegexCommand(sublime_plugin.TextCommand):
             # Erase the borders and select the regions
             else: view.erase_regions("SelectByRegexCommand")
         else: 
-            # Select the new regions
-            if len(new_regions):
-                if ST3:
-                    view.sel().add_all(new_regions)
-                else:
-                    for r in new_regions:
-                        view.sel().add(r)
-
+            # Skip empty regions, because that would empty the selection (annoying)
+            if len(new_regions): 
+                # Add each selection to the view
+                for region in new_regions: view.sel().add(region)
             # If not regions, then select the original regions
             else: view.sel().add_all(SelectByRegexCommand.original_regions)
             # Erase the borders and select the regions
