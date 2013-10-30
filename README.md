@@ -25,3 +25,7 @@ To bind this to a key, enter the following in your user keybinds file:
     "keys": ["super+alt+shift+f"], "command": "select_by_regex",
 }
 ````
+
+Credits:
+--------
+Special thanks to [klorenz](https://github.com/klorenz) for helping with the ST2 compatibility.
