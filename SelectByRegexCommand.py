@@ -5,8 +5,9 @@ import re, sublime, sublime_plugin
 ST3 = sublime.version() >= '3000'
 
 class SelectByRegexCommand(sublime_plugin.TextCommand):
-    previous_regex = ""
     original_regions = []
+    history = [ "" ]
+    history_index = 0
     
     def description():
         """
@@ -44,7 +45,9 @@ class SelectByRegexCommand(sublime_plugin.TextCommand):
             # Perform select by regex
             self.update_selection(text, draw_borders=False)
             # Save the selection for next time
-            SelectByRegexCommand.previous_regex = text
+            SelectByRegexCommand.history.append(text)
+            # Reset the history to the end (technically beginning)
+            SelectByRegexCommand.history_index = 0
     
     def restore_selection(self):
         """
@@ -71,7 +74,7 @@ class SelectByRegexCommand(sublime_plugin.TextCommand):
         for region in self.view.sel(): 
             SelectByRegexCommand.original_regions += [ sublime.Region(region.a, region.b) ]
         # Show the user input prompt asking for a regex
-        SelectByRegexCommand.input_view = self.view.window().show_input_panel('Regex:', SelectByRegexCommand.previous_regex, 
+        SelectByRegexCommand.input_view = self.view.window().show_input_panel('Regex:', '', 
             # On Done
             self.on_done,
             # On Change
@@ -79,6 +82,11 @@ class SelectByRegexCommand(sublime_plugin.TextCommand):
             # On Cancel
             self.on_cancel
             )
+        # Set a TMLanguage to give the input view a context, keybindings, etc.
+        SelectByRegexCommand.input_view.set_syntax_file('Packages/SelectByRegex/SelectByRegex.hidden-tmLanguage')
+        SelectByRegexCommand.input_view.settings().set("is_widget", True);
+        SelectByRegexCommand.input_view.settings().set("gutter", False);
+        SelectByRegexCommand.input_view.settings().set("rulers", []);
     
     def update_selection(self, regex, draw_borders=True):
         """
@@ -133,3 +141,15 @@ class SelectByRegexCommand(sublime_plugin.TextCommand):
             else: view.sel().add_all(SelectByRegexCommand.original_regions)
             # Erase the borders and select the regions
             view.erase_regions("SelectByRegexCommand")
+
+class SelectByRegexHistoryCommand(sublime_plugin.TextCommand):
+    def run(self, edit, backwards=False):
+        # Either go forwards or backwards
+        increment = [1, -1][backwards]
+        # Increment the history
+        SelectByRegexCommand.history_index += increment
+        # Wrap the history
+        SelectByRegexCommand.history_index %= len(SelectByRegexCommand.history)
+        # Replace the text with the item from history
+        self.view.replace(edit, sublime.Region(0, self.view.size()), SelectByRegexCommand.history[SelectByRegexCommand.history_index])
+        
