@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>SelectByRegex</string>
+	<key>scopeName</key>
+	<string>text.selectbyregex</string>
+	<key>uuid</key>
+	<string>d1f80e34-d8aa-4039-b321-9ec9c0873c09</string>
+</dict>
+</plist>

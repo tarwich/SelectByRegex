@@ -1,0 +1,33 @@
+[
+
+	{
+		"keys": ["up"], "command": "select_by_regex_history",
+		"args": {
+			"backwards": true
+		},
+		"context":
+		[
+			{ "key": "selector", "operator": "equal", "operand": "text.selectbyregex" }
+		]
+	},
+
+	{
+		"keys": ["down"], "command": "select_by_regex_history",
+		"context":
+		[
+			{ "key": "selector", "operator": "equal", "operand": "text.selectbyregex" }
+		]
+
+	},
+
+    {
+        "keys": ["escape"], "command": "select_by_regex_clear",
+        "context":
+        [
+            { "key": "align_tab_mode", "operator": "equal", "operand": "true" }
+        ]
+
+    }
+
+
+]
