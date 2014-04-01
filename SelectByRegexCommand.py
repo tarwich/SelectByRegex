@@ -83,7 +83,7 @@ class SelectByRegexCommand(sublime_plugin.TextCommand):
             self.on_cancel
             )
         # Set a TMLanguage to give the input view a context, keybindings, etc.
-        SelectByRegexCommand.input_view.set_syntax_file('Packages/SelectByRegex/SelectByRegex.hidden-tmLanguage')
+        SelectByRegexCommand.input_view.set_syntax_file('Packages/Select By Regex/SelectByRegex.hidden-tmLanguage')
         SelectByRegexCommand.input_view.settings().set("is_widget", True);
         SelectByRegexCommand.input_view.settings().set("gutter", False);
         SelectByRegexCommand.input_view.settings().set("rulers", []);
